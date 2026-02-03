@@ -1,85 +1,97 @@
-# Network Security with Proxy, IDS/IPS & SIEM
+# Enterprise Network Security Architecture  
+## Firewall, DMZ, VPN, Proxy, IDS/IPS & SIEM
+
+---
 
 ## 📌 Project Overview
-This project demonstrates the design and implementation of a **secure enterprise-grade network**
-using **Debian Linux** and **VirtualBox**. The architecture focuses on **network segmentation,
-controlled internet access, attack detection & prevention, and centralized monitoring**.
+This project demonstrates the design and implementation of a **secure enterprise-grade network architecture** using **Debian Linux** and **VirtualBox**.
 
-The project simulates a **real-world enterprise security environment** by implementing
-a firewall with LAN–DMZ separation, deploying a proxy server, enabling IDS/IPS capabilities,
-and integrating a SIEM platform for visibility and analysis.
+The goal of this project was to **connect multiple security controls together**—firewall, proxy, IDS/IPS, and SIEM—to simulate how real organizations **detect, block, and analyze network attacks**.
+
+Rather than focusing on a single tool, this lab shows **end-to-end traffic flow and security visibility**.
+
+---
+
+## 🎯 Why This Project
+During my PG-DITISS training, most labs focused on individual tools (only firewall, only IDS, or only SIEM).  
+In real enterprises, these components **work together**.
+
+This project was built to demonstrate:
+- Network segmentation using **LAN, DMZ, WAN, and VPN**
+- Controlled internet access using a **proxy**
+- **Inline intrusion prevention** using Suricata
+- **Centralized monitoring and alerting** using SIEM
 
 ---
 
 ## 🧱 Architecture Summary
 The network is divided into multiple security zones:
 
-- **LAN** – Internal users
-- **DMZ** – Public-facing services (Web Server & Proxy)
-- **WAN** – Internet
-- **Management Network** – SIEM monitoring
+- **LAN** – Internal users  
+- **DMZ** – Public-facing services (Web Server & Proxy)  
+- **WAN** – Internet  
+- **Management Network** – SIEM monitoring  
 
-Security controls are enforced using Linux firewalling, intrusion detection/prevention,
-and centralized logging.
+All inter-zone communication is enforced using **iptables firewall rules**.
 
 ---
 
 ## 🌐 Network Design
 
 | Component | IP Address |
-|--------|------------|
-Firewall (LAN) | 192.168.10.1
-Client Machine | 192.168.10.10
-Web Server (DMZ) | 192.168.20.10
-Proxy Server (DMZ) | 192.168.20.20
-Splunk SIEM Server | 192.168.10.50
+|---|---|
+| Firewall (LAN) | 192.168.10.1 |
+| Client Machine | 192.168.10.10 |
+| Web Server (DMZ) | 192.168.20.10 |
+| Proxy Server (DMZ) | 192.168.20.20 |
+| Splunk SIEM Server | 192.168.10.50 |
 
 ---
 
-## 🔥 Key Security Features
+## 🔥 Key Security Components
 
 ### 🔐 Firewall (iptables)
+- Default **DROP** policy (zero-trust)
 - Stateful packet filtering
-- NAT for LAN and DMZ networks
-- Strict LAN ↔ DMZ isolation
-- Controlled access to services
-- Inline traffic inspection via NFQUEUE
+- NAT for LAN and DMZ
+- Strict **LAN ↔ DMZ isolation**
+- Inline traffic inspection using **NFQUEUE**
 
 ### 🌐 Proxy Server (Squid)
-- Centralized internet access control
-- Prevents direct client internet exposure
-- Improves security visibility and policy enforcement
+- Centralized internet access for LAN users
+- Prevents direct LAN-to-internet communication
+- Improves visibility and policy enforcement
 
 ### 🚨 IDS / IPS (Suricata)
 - Inline IPS mode using NFQUEUE
-- Detects network reconnaissance (Nmap scans)
+- Detects reconnaissance activity (e.g., Nmap scans)
 - Automatically blocks malicious traffic
 - Generates structured security alerts
 
 ### 📊 SIEM (Splunk)
 - Centralized log collection
 - Suricata alerts forwarded via Universal Forwarder
-- Real-time security monitoring and analysis
-- Attack visibility with source/destination correlation
+- Real-time monitoring and alert correlation
+- Visibility into blocked IPs and attack attempts
 
 ---
 
 ## 🧪 Attack Detection Demonstration
-1. An **Nmap SYN scan** is launched from the LAN client.
-2. The firewall forwards traffic to **Suricata IPS**.
-3. Suricata detects reconnaissance behavior.
-4. Malicious packets are **blocked inline**.
-5. Alerts are forwarded to **Splunk SIEM** for monitoring.
+1. An **Nmap SYN scan** is launched from a LAN client  
+2. Traffic is forwarded by the firewall  
+3. Suricata detects reconnaissance behavior  
+4. Malicious packets are blocked inline  
+5. Alerts are forwarded to Splunk SIEM  
 
 ---
 
 ## 🛠 Technologies Used
-- Debian Linux 13
-- iptables
-- Suricata IDS/IPS
-- Squid Proxy Server
-- Splunk Enterprise SIEM
-- VirtualBox
+- Debian Linux 13  
+- iptables  
+- Suricata IDS/IPS  
+- Squid Proxy Server  
+- Splunk Enterprise SIEM  
+- VirtualBox  
 
 ---
 
@@ -88,24 +100,16 @@ Splunk SIEM Server | 192.168.10.50
 - DMZ architecture and isolation
 - IDS vs IPS practical implementation
 - Network attack simulation and mitigation
-- SIEM integration and log analysis
-- Security-focused system documentation
+- SIEM-based monitoring and analysis
+- Security-focused documentation
 
 ---
 
 ## 📁 Repository Structure
-    firewall/ → iptables firewall rules
-    ids_ips/ → Suricata configuration and detection rules
-    proxy/ → Squid proxy configuration
-    splunk/ → SIEM and forwarder setup
-    diagrams/ → Network architecture diagrams
-    screenshots/ → Proof of detection & blocking
-
----
-
-## 👤 Author
-**Varad Suryawanshi**  
-Cybersecurity & Network Security Enthusiast  
-
-> *This project was built for learning, demonstration, and interview preparation purposes,
-simulating real enterprise security controls and workflows.*
+```text
+firewall/     → iptables firewall rules  
+ids_ips/      → Suricata configuration and detection rules  
+proxy/        → Squid proxy configuration  
+splunk/       → SIEM and log forwarding setup  
+diagrams/     → Network architecture diagrams  
+screenshots/  → Proof of detection and blocking  
