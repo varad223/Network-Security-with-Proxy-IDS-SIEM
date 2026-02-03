@@ -1,0 +1,4 @@
+alert tcp any any -> 192.168.20.10 any (msg:"TEST NMAP ALERT"; flags:S; sid:9999999; rev:1;)
+alert tcp any any -> 192.168.20.1 any (msg:"TEST NMAP ALERT"; flags:S; sid:9999999; rev:1;)
+drop tcp any any -> 192.168.20.10 any (msg:"IPS BLOCK NMAP SYN SCAN";flags:S;threshold:type both, track by_src, count 5, seconds 2;classtype:attempted-recon;sid:2000001; rev:1;)
+drop tcp any any -> 192.168.20.1 any (msg:"IPS BLOCK NMAP SYN SCAN";flags:S;threshold:type both, track by_src, count 5, seconds 2;classtype:attempted-recon;sid:2000001; rev:1;)
